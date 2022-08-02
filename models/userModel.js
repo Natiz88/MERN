@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "number is reqired"],
+    required: [true, "password is reqired"],
   },
   password_confirmation: {
     type: String,
-    required: [true, "number is reqired"],
+    required: [true, "password_confirmation is reqired"],
   },
 });
 

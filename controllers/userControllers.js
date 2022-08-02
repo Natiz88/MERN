@@ -2,12 +2,12 @@ const User = require("../models/userModel");
 
 exports.getUsers = async (req, res) => {
   try {
-    const users = User.find();
-    res.status(400).json({
+    const allUsers = await User.find();
+    res.status(200).json({
       status: "successfull",
-      results: users.length,
+      results: allUsers.length,
       data: {
-        users,
+        users: allUsers,
       },
     });
   } catch (err) {
@@ -19,8 +19,8 @@ exports.getUsers = async (req, res) => {
 };
 exports.getIndividualUser = async (req, res) => {
   try {
-    const singleUser = User.findById(req.params.id);
-    res.status(400).json({
+    const singleUser = await User.findById(req.params.id);
+    res.status(200).json({
       status: "successfull",
       data: {
         user: singleUser,
@@ -36,7 +36,6 @@ exports.getIndividualUser = async (req, res) => {
 exports.postUser = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
-
     res.status(200).json({
       status: "success",
       data: {
@@ -52,10 +51,12 @@ exports.postUser = async (req, res) => {
 };
 exports.updateUser = async (req, res) => {
   try {
-    const user = User.findByIdAndUpdate(req.params.id, req.body);
-    res.status(400).json({
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
       status: "successfull",
-      results: user,
       data: {
         user: user,
       },
@@ -69,8 +70,8 @@ exports.updateUser = async (req, res) => {
 };
 exports.deleteUser = async (req, res) => {
   try {
-    const user = User.findByIdAndDelete(req.params.id);
-    res.status(400).json({
+    const user = await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({
       status: "successfull",
       data: {
         user: user,

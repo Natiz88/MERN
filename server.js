@@ -10,9 +10,11 @@ const DB = process.env.DATABASE.replace(
 );
 
 mongoose
-  .connect(DB)
-  .then(() => console.log("database connected mongo"))
+  .connect(DB, {
+    useNewUrlParser: true,
+  })
+  .then(() => console.log("mongodb database connected"))
   .catch((err) => console.log("error mongo", err));
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log("app is started at 5000"));
+app.listen(port, () => console.log(`app is started at ${port}`));

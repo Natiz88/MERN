@@ -1,16 +1,16 @@
 const express = require("express");
-const userControllers = require("../controllers/mysqluserControllers");
+const userController = require("./../controllers/userControllers");
 
 const userRouter = express.Router();
 userRouter
   .route("/")
-  .get(userControllers.getUsers)
-  .post(userControllers.postUser);
+  .get(userController.getUsers)
+  .post(userController.postUser);
 
 userRouter
   .route("/:id")
-  .get(userControllers.getSingleUser)
-  .put(userControllers.updateUser)
-  .delete(userControllers.deleteUser);
+  .get(userController.getIndividualUser)
+  .put(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = userRouter;
