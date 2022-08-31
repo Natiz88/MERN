@@ -1,14 +1,14 @@
-const User = require("../models/userModel");
+const categories = require("../models/categoriesModel");
 
-exports.getUsers = async (req, res) => {
+exports.getcategories = async (req, res) => {
   const query = req.query;
   try {
-    const allUsers = await User.find(query);
+    const allcategories = await categories.find();
     res.status(200).json({
       status: "successfull",
-      results: allUsers.length,
+      results: allcategories.length,
       data: {
-        users: allUsers,
+        categories: allcategories,
       },
     });
   } catch (err) {
@@ -18,13 +18,13 @@ exports.getUsers = async (req, res) => {
     });
   }
 };
-exports.getIndividualUser = async (req, res) => {
+exports.getIndividualcategories = async (req, res) => {
   try {
-    const singleUser = await User.findById(req.params.id);
+    const singlecategories = await categories.findById(req.params.id);
     res.status(200).json({
       status: "successfull",
       data: {
-        user: singleUser,
+        categories: singlecategories,
       },
     });
   } catch (err) {
@@ -34,13 +34,13 @@ exports.getIndividualUser = async (req, res) => {
     });
   }
 };
-exports.postUser = async (req, res) => {
+exports.postcategories = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
+    const newcategories = await categories.create(req.body);
     res.status(201).json({
       status: "success",
       data: {
-        user: newUser,
+        categories: newcategories,
       },
     });
   } catch (err) {
@@ -50,16 +50,16 @@ exports.postUser = async (req, res) => {
     });
   }
 };
-exports.updateUser = async (req, res) => {
+exports.updatecategories = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updatecategories = await categories.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
     res.status(200).json({
       status: "successfull",
       data: {
-        user: user,
+        categories: updatecategories,
       },
     });
   } catch (err) {
@@ -69,13 +69,14 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
-exports.deleteUser = async (req, res) => {
+exports.deletecategories = async (req, res) => {
+  console.log(req.params.id);
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const deletecategories = await categories.findByIdAndDelete(req.params.id);
     res.status(200).json({
       status: "successfull",
       data: {
-        user: user,
+        categories: deletecategories,
       },
     });
   } catch (err) {

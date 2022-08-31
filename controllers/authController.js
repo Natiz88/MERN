@@ -37,6 +37,7 @@ exports.signup = async (req, res) => {
   }
 };
 exports.login = async (req, res) => {
+  console.log(req.body);
   req.requestTime = new Date().toISOString();
 
   const { email, password } = req.body;
