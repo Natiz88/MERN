@@ -1,4 +1,34 @@
+const multer = require("multer");
 const User = require("../models/userModel");
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/users");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `user-${req.params.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid mime type!"), false);
+  }
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+exports.uploadUserPhoto = upload.single("photo");
+
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 
 exports.getUsers = async (req, res) => {
   const query = req.query;
@@ -51,8 +81,11 @@ exports.postUser = async (req, res) => {
   }
 };
 exports.updateUser = async (req, res) => {
+  console.log("daat", req.body);
+  const filteredBody = filterObj(req.body, "name", "address", "mobile_number");
+  if (req.file) filteredBody.photo = req.file.filename;
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    const user = await User.findByIdAndUpdate(req.params.id, filteredBody, {
       new: true,
       runValidators: true,
     });
